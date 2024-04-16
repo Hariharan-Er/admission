@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admission Form</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Admission Form</h1>
+    <form id="admission-form">
+        <label for="full_name">Full Name:</label>
+        <input type="text" id="full_name" name="full_name" required><br><br>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="phone">Phone:</label>
+        <input type="tel" id="phone" name="phone" required><br><br>
+
+        <label for="course">Course:</label>
+        <select id="course" name="course" required>
+            <option value="">-- Select Course --</option>
+            <option value="Computer Science">Computer Science</option>
+            <option value="Engineering">Engineering</option>
+            <option value="Business Administration">Business Administration</option>
+        </select><br><br>
+
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4"></textarea><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        document.getElementById("admission-form").addEventListener("submit", function(event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            // Get form data
+            let formData = {
+                full_name: document.getElementById("full_name").value,
+                email: document.getElementById("email").value,
+                phone: document.getElementById("phone").value,
+                course: document.getElementById("course").value,
+                message: document.getElementById("message").value
+            };
+            
+            // Make POST request to backend
+            fetch("http://127.0.0.1:8000/admission-form", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+                return response.json(); // Parse response JSON
+            })
+            .then(data => {
+                alert(data.message); // Display success message
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred. Please try again."); // Display error message
+            });
+        });
+    </script>
+</body>
+</html>
